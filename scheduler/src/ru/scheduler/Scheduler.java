@@ -1,7 +1,6 @@
 package ru.scheduler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -12,7 +11,7 @@ import java.util.*;
  * Time: 14:17:54
  */
 public class Scheduler extends Observable {
-    private static final Log log = LogFactory.getLog(Scheduler.class);
+    private static final Logger log = Logger.getLogger(Scheduler.class);
     private final PriorityQueue<Task> queue;
     private final Thread thread;
     private final Executor executor;

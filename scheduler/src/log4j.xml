@@ -12,15 +12,8 @@
 			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
 		</layout>
 	</appender>
-
-    <logger name="com.kreditpilot">
-        <level value="debug"/>
-    </logger>
-    <logger name="com.kreditpilot.connection">
-        <level value="warn"/>
-    </logger>
 	<root>
-		<priority value="info" />
+		<priority value="debug" />
 		<appender-ref ref="CONSOLE" />
 	</root>
 </log4j:configuration>

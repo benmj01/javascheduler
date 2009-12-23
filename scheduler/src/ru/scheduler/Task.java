@@ -1,9 +1,8 @@
 package ru.scheduler;
 
+import org.apache.log4j.Logger;
+
 import java.util.Date;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Executor;
 import java.text.MessageFormat;
 import java.io.IOException;
 
@@ -14,6 +13,8 @@ import java.io.IOException;
  * Time: 13:58:56
  */
 public class Task implements Comparable {
+    private static final Logger log = Logger.getLogger(Task.class);
+
     private TaskType type;
     private Date date;
     private String[] params;
@@ -43,17 +44,20 @@ public class Task implements Comparable {
     }
 
     public void execute() throws IOException {
-        final String cmd = MessageFormat.format(type.getCommand(), params);
-        System.out.println(cmd);
-        new Thread(new Runnable() {
+        final String cmd = MessageFormat.format(type.getCommand(), (Object[]) params);
+        Thread taskThread = new Thread(new Runnable() {
             public void run() {
                 try {
+                    log.debug("executing task: ".concat(cmd));
                     Runtime.getRuntime().exec(cmd);
+                    log.debug("task executed");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        taskThread.setDaemon(true);
+        taskThread.start();
     }
 
     public int compareTo(Object o) {
