@@ -1,23 +1,15 @@
 package ru.scheduler.view;
 
 import ru.scheduler.Scheduler;
-import ru.scheduler.Task;
-import ru.scheduler.ConfigurationFactory;
-import ru.scheduler.Configuration;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.event.*;
-import java.util.Date;
 import java.util.TimeZone;
 
-import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,7 +18,7 @@ import org.apache.commons.logging.Log;
  * Time: 17:20:56
  */
 public class MainFrame extends JFrame {
-    private static final Log log = LogFactory.getLog(MainFrame.class);
+    private static final Logger log = Logger.getLogger(MainFrame.class);
     private final Timer timer;
     private final TaskDialog dlg;
 
@@ -137,8 +129,8 @@ public class MainFrame extends JFrame {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+00:00"));
         try {
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyDefault");
-//            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyBedouin");
+//            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyDefault");
+            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyBedouin");
 //            UIManager.setLookAndFeel("javax.swing.plaf.multi.MultiLookAndFeel");
 //            UIManager.setLookAndFeel("javax.swing.plaf.synth.SynthLookAndFeel");
         } catch (Exception e) {
