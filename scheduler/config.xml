@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+    <type>
+        <description>Завершить процесс</description>
+        <command>taskkill /IM {0}*</command>
+        <params>
+            <param>
+                <title>Имя процесса</title>
+            </param>
+        </params>
+    </type>
+
+    <type>
+        <description>Убить процесс</description>
+        <command>taskkill /f /IM {0}*</command>
+        <params>
+            <param>
+                <title>Имя процесса</title>
+            </param>
+        </params>
+    </type>
+
+    <type>
+        <description>Убить дерево процессов</description>
+        <command>taskkill /f /IM {0}* /T</command>
+        <params>
+            <param>
+                <title>Имя процесса</title>
+            </param>
+        </params>
+    </type>
+
+    <type>
+        <description>Перезагрузка</description>
+        <command>shutdown -r -t 0</command>
+    </type>
+
+    <type>
+        <description>Гибернация</description>
+        <command>shutdown -h</command>
+    </type>
+
+    <type>
+        <description>Завершение работы</description>
+        <command>shutdown -s -t 0</command>
+    </type>
+
+    <type>
+        <description>Слушать DiFM</description>
+        <command>"C:\Program Files\Windows Media Player\wmplayer" http://sradio.ru/stream/2.m3u</command>
+    </type>
+</configuration>
