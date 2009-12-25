@@ -3,11 +3,15 @@ package ru.scheduler.view;
 import ru.scheduler.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
+import static java.awt.event.KeyEvent.*;
+
+import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,6 +20,12 @@ import java.awt.event.ActionEvent;
  * Time: 18:18:16
  */
 public class TaskDialog extends JDialog {
+    private static final Logger log = Logger.getLogger(TaskDialog.class);
+    private static final String TIME_FORMAT = "HH:mm:ss";
+    private static final char[] keys = "0123456789:\u0008".toCharArray();
+    static {
+        Arrays.sort(keys);
+    }
     private final JComboBox type;
     private final JSpinner time;
     private final JPanel paramsPanel;
@@ -29,7 +39,6 @@ public class TaskDialog extends JDialog {
         paramsPanel = new JPanel();
         paramsPanel.setBorder(BorderFactory.createTitledBorder("Параметры"));
         paramsPanel.setLayout(new GridBagLayout());
-//        paramsPanel.setMinimumSize(new Dimension(300, 100));
         type = new JComboBox();
 
         Calendar c = Calendar.getInstance();
@@ -39,7 +48,19 @@ public class TaskDialog extends JDialog {
         Date to = c.getTime();
 
         time = new JSpinner(new SpinnerDateModel(from, from, to, Calendar.SECOND));
-        time.setEditor(new JSpinner.DateEditor(time, "HH:mm:ss"));
+
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(time, TIME_FORMAT);
+        editor.getTextField().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+                char c = keyEvent.getKeyChar();
+                if (Arrays.binarySearch(keys, c) < 0) {
+                    keyEvent.consume();
+                }
+            }
+        });
+
+        time.setEditor(editor);
 
         JPanel taskPanel = new JPanel();
         GridBagLayout gbl = new GridBagLayout();
