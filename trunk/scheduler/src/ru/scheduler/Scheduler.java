@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class Scheduler extends Observable {
     private static final Logger log = Logger.getLogger(Scheduler.class);
-    private final PriorityQueue<Task> queue;
+    private final Queue<Task> queue;
     private final Thread thread;
     private final Executor executor;
     private static Scheduler instance;
@@ -32,7 +32,7 @@ public class Scheduler extends Observable {
                         try {
                             queue.wait();
                         } catch (InterruptedException e) {
-                            //do nothing
+                            log.debug("task waiting interrupted");
                         }
                     }
                     if (!queue.isEmpty()) {
@@ -47,13 +47,12 @@ public class Scheduler extends Observable {
                                 e.printStackTrace();
                             }
                         } else {
-
                             long wait = task.getDate().getTime() - System.currentTimeMillis();
                             log.info("wait task: " + wait + " millis");
                             try {
                                 queue.wait(wait);
                             } catch (InterruptedException e) {
-                                //do nothing
+                                log.debug("waiting interrupted");
                             }
                         }
                     }
@@ -110,11 +109,9 @@ public class Scheduler extends Observable {
     public List<Task> getTasks() {
         if (changed) {
             synchronized (queue) {
-                snapshot = new ArrayList<Task>(queue.size());
-                for (Task t : queue) {
-                    snapshot.add(t);
-                }
+                snapshot = new ArrayList<Task>(queue);
             }
+            changed = false;
         }
         return snapshot;
     }

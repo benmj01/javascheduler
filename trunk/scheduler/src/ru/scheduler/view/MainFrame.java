@@ -129,8 +129,8 @@ public class MainFrame extends JFrame {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+00:00"));
         try {
 //            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-//            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyDefault");
-            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyBedouin");
+            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyDefault");
+//            UIManager.setLookAndFeel("com.incors.plaf.alloy.AlloyBedouin");
 //            UIManager.setLookAndFeel("javax.swing.plaf.multi.MultiLookAndFeel");
 //            UIManager.setLookAndFeel("javax.swing.plaf.synth.SynthLookAndFeel");
         } catch (Exception e) {
