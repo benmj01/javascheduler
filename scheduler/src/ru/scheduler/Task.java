@@ -44,7 +44,7 @@ public class Task implements Comparable {
     }
 
     public void execute() throws IOException {
-        final String cmd = MessageFormat.format(type.getCommand(), (Object[]) params);
+        final String cmd = MessageFormat.format(type.getCommand(), params);
         Thread taskThread = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -52,7 +52,8 @@ public class Task implements Comparable {
                     Runtime.getRuntime().exec(cmd);
                     log.debug("task executed");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e);
+//                    e.printStackTrace();
                 }
             }
         });

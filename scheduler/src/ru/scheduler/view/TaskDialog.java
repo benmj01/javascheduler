@@ -23,9 +23,11 @@ public class TaskDialog extends JDialog {
     private static final Logger log = Logger.getLogger(TaskDialog.class);
     private static final String TIME_FORMAT = "HH:mm:ss";
     private static final char[] keys = "0123456789:\u0008".toCharArray();
+
     static {
         Arrays.sort(keys);
     }
+
     private final JComboBox type;
     private final JSpinner time;
     private final JPanel paramsPanel;
@@ -54,7 +56,9 @@ public class TaskDialog extends JDialog {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
                 char c = keyEvent.getKeyChar();
-                if (Arrays.binarySearch(keys, c) < 0) {
+                if (c == '\n') {
+                    createTask();
+                } else if (Arrays.binarySearch(keys, c) < 0) {
                     keyEvent.consume();
                 }
             }
@@ -77,7 +81,14 @@ public class TaskDialog extends JDialog {
         gbc.weightx = 1;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         final GridBagConstraints inputGbc = (GridBagConstraints) gbc.clone();
-
+        final KeyListener enterListener = new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+                if (keyEvent.getKeyChar() == '\n') {
+                    createTask();
+                }
+            }
+        };
         type.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 TaskType tt = (TaskType) type.getSelectedItem();
@@ -85,11 +96,13 @@ public class TaskDialog extends JDialog {
                 if (tt.getParams() != null) {
                     for (Param p : tt.getParams()) {
                         paramsPanel.add(new JLabel(p.getTitle()), labelGbc);
-                        paramsPanel.add(new JTextField(), inputGbc);
+                        JTextField f = new JTextField();
+                        f.addKeyListener(enterListener);
+                        paramsPanel.add(f, inputGbc);
                     }
                 }
-                paramsPanel.setVisible(false);
-                paramsPanel.setVisible(true);
+                paramsPanel.doLayout();
+                paramsPanel.repaint();
             }
         });
         for (TaskType t : conf.getTasks()) {
@@ -102,7 +115,7 @@ public class TaskDialog extends JDialog {
         taskPanel.add(new JLabel("Интервал"), labelGbc);
         taskPanel.add(time, inputGbc);
 
-        setMinimumSize(new Dimension(500, 180));
+        setMinimumSize(new Dimension(520, 180));
 
         JButton addTask = new JButton("Создать");
         JButton cancel = new JButton("Отмена");
@@ -116,12 +129,7 @@ public class TaskDialog extends JDialog {
 
         addTask.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-                Task t = new Task();
-                t.setType(getTaskType());
-                t.setDate(getTaskDate());
-                t.setParams(getParams());
-                Scheduler.getInstance().addTask(t);
-                dlg.setVisible(false);
+                createTask();
             }
         });
 
@@ -139,9 +147,18 @@ public class TaskDialog extends JDialog {
         gbc.gridwidth = GridBagConstraints.RELATIVE;
         cPane.add(addTask, gbc);
         cPane.add(cancel, gbc);
-        
+
         setContentPane(cPane);
 
+    }
+
+    private void createTask() {
+        Task t = new Task();
+        t.setType(getTaskType());
+        t.setDate(getTaskDate());
+        t.setParams(getParams());
+        Scheduler.getInstance().addTask(t);
+        setVisible(false);
     }
 
     public void setVisible(boolean value) {
@@ -149,7 +166,7 @@ public class TaskDialog extends JDialog {
             Point location = getParent().getLocation();
             Dimension size = getParent().getSize();
             Dimension windowSize = getSize();
-            setLocation(location.x + size.width / 2 - windowSize.width / 2, location.y + size.height / 2 - windowSize.height / 2 );
+            setLocation(location.x + size.width / 2 - windowSize.width / 2, location.y + size.height / 2 - windowSize.height / 2);
         }
         super.setVisible(value);
     }
@@ -172,7 +189,7 @@ public class TaskDialog extends JDialog {
 
     public Date getTaskDate() {
         Date now = new Date();
-        Date date = ((SpinnerDateModel)time.getModel()).getDate();
+        Date date = ((SpinnerDateModel) time.getModel()).getDate();
         return new Date(now.getTime() + date.getTime());
     }
 }
