@@ -1,0 +1,1 @@
+simple java swing-based desktop scheduler application, basically for windows os
